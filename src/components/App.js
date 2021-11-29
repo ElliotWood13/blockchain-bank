@@ -1,5 +1,5 @@
 import { Tabs, Tab } from 'react-bootstrap'
-import eCoin from '../abis/eCoin.json'
+import ECoin from '../abis/eCoin.json'
 import React, { Component } from 'react';
 import Token from '../abis/Token.json'
 import eCoinPng from '../dbank.png';
@@ -203,7 +203,7 @@ class App extends Component {
                     (You'll receive your collateral - fee)
                     <br></br>
                     <br></br>
-                    <button type='submit' className='btn btn-primary' onClick={(e) => this.payOff(e)}>PAYOFF</button>
+                    <button type='submit' className='btn btn-fprimary' onClick={(e) => this.payOff(e)}>PAYOFF</button>
                   </div>
                 </Tab>
               </Tabs>

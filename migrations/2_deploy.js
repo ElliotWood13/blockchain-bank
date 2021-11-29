@@ -12,8 +12,8 @@ module.exports = async function(deployer) {
     await deployer.deploy(eCoin, token.address)
 
     //assign eCoin contract into variable to get it's address
-    const eCoin = await eCoin.deployed()
+    const eCoinContract = await eCoin.deployed()
 
 	//change token's owner/minter from deployer to eCoin
-    await token.passMinterRole(eCoin.address)
+    await token.passMinterRole(eCoinContract.address)
 };

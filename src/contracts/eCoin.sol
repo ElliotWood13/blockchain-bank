@@ -125,6 +125,12 @@ contract eCoin {
     mapping(address => bool) public isDeposited;
 
     event Deposit(address indexed user, uint256 etherAmount, uint256 timeStart);
+    event Withdraw(
+        address indexed user,
+        uint256 etherAmount,
+        uint256 depositTime,
+        uint256 interest
+    );
 
     constructor(Token _token) public {
         token = _token;
@@ -139,6 +145,27 @@ contract eCoin {
         etherBalanceOf[msg.sender] = etherBalanceOf[msg.sender] + msg.value;
         depositStart[msg.sender] = depositStart[msg.sender] + block.timestamp;
         isDeposited[msg.sender] = true;
-        emit Depost(msg.sender, msg.value, block.timestamp);
+        emit Deposit(msg.sender, msg.value, block.timestamp);
+    }
+
+    function withdraw() public {
+        require(isDeposited[msg.sender] == true, "Error, no previous deposit");
+        uint256 userBalance = etherBalanceOf[msg.sender]; // for event
+
+        // check user's hodl time
+        uint256 depositTime = block.timestamp - depositStart[msg.sender];
+
+        uint256 interestPerSecond = 31668017 * (userBalance / 1e16);
+        uint256 interest = interestPerSecond * depositTime;
+
+        msg.sender.transfer(userBalance);
+        token.mint(msg.sender, interest);
+
+        // reset depositer data
+        depositStart[msg.sender] = 0;
+        etherBalanceOf[msg.sender] = 0;
+        isDeposited[msg.sender] = false;
+
+        emit Withdraw(msg.sender, userBalance, depositTime, interest);
     }
 }
